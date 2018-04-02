@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+	
+	<!--组件扫描  -->
+	<context:component-scan base-package="com.cai.controller"/>
+	<!--注解驱动 开启注解 -->
+	<mvc:annotation-driven conversion-service="conversionService"/>
+	
+	<!--自定义参数绑定组件  为了在jsp传给controller不报错-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!-- 转换器 -->
+        <property name="converters">
+            <set>
+                <!-- 日期类型转换 -->
+                <bean class="com.cai.controller.converter.CustomDateConverter"/>
+            </set>
+        </property>
+    </bean>
+    
+	<!--加载静态资源  -->
+	<mvc:default-servlet-handler/>
+	<!--?  -->
+	<context:annotation-config/>
+	
+	<!-- 全局异常处理器 -->
+	<bean class="com.cai.exception.CustomExceptionResolver"></bean>
+	
+	<!--视图解析器 -->
+	 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--拼接视图地址的前缀和后缀-->
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+  </beans>
